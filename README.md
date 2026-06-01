@@ -1,51 +1,97 @@
-# ResearchMind
+<div align="center">
+  <h1>🔬 ResearchMind</h1>
+  <p><strong>An autonomous multi-agent research pipeline built with Streamlit and LangChain</strong></p>
 
-An autonomous multi-agent research pipeline built with Streamlit and LangChain. 
+  [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg?style=flat-square&logo=python)](https://www.python.org/)
+  [![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B.svg?style=flat-square&logo=streamlit)](https://streamlit.io/)
+  [![LangChain](https://img.shields.io/badge/LangChain-Integration-green.svg?style=flat-square)](https://python.langchain.com/)
+  [![License](https://img.shields.io/badge/License-MIT-gray.svg?style=flat-square)](LICENSE)
+</div>
 
-You give it a topic, and it spins up four specialized agents to investigate, read, draft, and review a complete research report.
+<br>
 
-## How it works
+ResearchMind automates the workflow of a human researcher. You provide a topic, and the system spins up four specialized AI agents that collaborate to search the web, scrape deep content, draft a comprehensive report, and review it for quality.
 
-The pipeline runs sequentially using LangChain and Mistral:
-1. **Search Agent**: Uses Tavily to query the web and find recent, relevant sources.
-2. **Reader Agent**: Scrapes the best URLs to extract in-depth content.
-3. **Writer Chain**: Synthesizes the scraped data into a structured markdown report.
-4. **Critic Chain**: Reviews the final draft, scoring it and suggesting improvements.
+---
 
-## Setup
+## 🏗️ System Architecture
 
-1. Clone the repo:
+The pipeline executes sequentially, passing context from one specialized agent to the next:
+
+```mermaid
+graph TD
+    User([User Enters Topic]) --> Search[Search Agent]
+    
+    subgraph Multi-Agent Pipeline
+    Search -->|Tavily API Search| Reader[Reader Agent]
+    Reader -->|Scrapes Target URLs| Writer[Writer Chain]
+    Writer -->|Generates Draft| Critic[Critic Chain]
+    end
+    
+    Critic -->|Scores & Feedback| Output([Final Markdown Report])
+    
+    style Search fill:#2D3748,stroke:#4A5568,color:#fff
+    style Reader fill:#2D3748,stroke:#4A5568,color:#fff
+    style Writer fill:#2D3748,stroke:#4A5568,color:#fff
+    style Critic fill:#2D3748,stroke:#4A5568,color:#fff
+```
+
+## 🧠 Agent Roles
+
+| Agent | Core Function | Technology / Tool |
+| :--- | :--- | :--- |
+| **Search Agent** | Queries the web for recent and highly relevant sources based on the user's prompt. | LangChain Agent + Tavily API |
+| **Reader Agent** | Extracts the most relevant URLs and scrapes the underlying HTML for deep, factual content. | LangChain Agent + BeautifulSoup |
+| **Writer Chain** | Synthesizes the scraped data into a structured, professional markdown report (Introduction, Findings, Conclusion, Sources). | Mistral AI + Prompt Templates |
+| **Critic Chain** | Acts as an independent reviewer. Scores the draft out of 10 and provides actionable feedback on strengths and weaknesses. | Mistral AI + Prompt Templates |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Python 3.11 or higher
+- API Keys for **OpenAI** (or Mistral depending on your config) and **Tavily**
+
+### Local Installation
+
+1. **Clone the repository**
    ```bash
    git clone https://github.com/mrdhruv2005/Multi-Agent-System-Researcher.git
    cd Multi-Agent-System-Researcher
    ```
 
-2. Install dependencies:
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-3. Set up your API keys:
-   Create a `.env` file in the root directory and add your keys:
+3. **Configure Environment Variables**
+   Create a `.env` file in the project root:
    ```env
-   OPENAI_API_KEY=your_openai_key
-   TAVILY_API_KEY=your_tavily_key
-   MISTRAL_API_KEY=your_mistral_key
+   OPENAI_API_KEY=your_openai_key_here
+   TAVILY_API_KEY=your_tavily_key_here
+   MISTRAL_API_KEY=your_mistral_key_here
    ```
-   *(Note: The codebase uses Mistral for the core LLM logic, but ensure you have the keys required by your specific LangChain setup).*
 
-4. Run the app locally:
+4. **Launch the application**
    ```bash
    streamlit run app.py
    ```
 
-## Deployment
+---
 
-This app is set up for easy deployment on [Streamlit Community Cloud](https://streamlit.io/cloud). 
-- **Python version**: 3.11 is recommended.
-- **Secrets**: Add your `.env` variables to the Streamlit App Settings -> Secrets panel before deploying.
-- **Sleep prevention**: A GitHub Action (`keep-awake.yml`) is included in this repo. It pings the app every hour so the free tier doesn't spin it down from inactivity. 
+## ☁️ Cloud Deployment (Streamlit Community Cloud)
 
-## License
+This repository is pre-configured for seamless deployment on Streamlit Community Cloud.
 
-MIT
+1. Connect this repository to your Streamlit Cloud account.
+2. Select `app.py` as your main file.
+3. Choose **Python 3.11** as the runtime.
+4. Add your `.env` variables into the **Streamlit Secrets** configuration panel.
+
+**Note on Uptime:** A GitHub Action workflow (`.github/workflows/keep-awake.yml`) is included in this repository. It automatically pings the Streamlit app every hour to prevent it from entering sleep mode due to inactivity on the free tier.
+
+## 📄 License
+
+This project is licensed under the MIT License.
