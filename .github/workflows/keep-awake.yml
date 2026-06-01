@@ -14,4 +14,4 @@ jobs:
         run: |
           echo "Pinging the Streamlit app to keep it awake..."
           # Replace the URL below with your actual deployed Streamlit URL
-          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://your-app-url.streamlit.app/
+          curl -s -o /dev/null -w "HTTP Status: %{http_code}\n" https://multi-agent-system-researcher-jdg4vvoihvh5n89excwvhw.streamlit.app/
