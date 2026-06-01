@@ -1,5 +1,7 @@
 # Core LLM + LangChain ecosystem
 langchain>=0.2.0
+langchain-mistralai
+streamlit
 langchain-core>=0.2.0
 langchain-community>=0.2.0
 langchain-openai>=0.1.0
